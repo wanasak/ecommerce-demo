@@ -24,13 +24,13 @@ exports.signin = (req, res) => {
   User.findOne({ email }, (err, user) => {
     if ((err, !user)) {
       return res.status(400).json({
-        err: 'User with that email does not exist. Please signup'
+        error: 'User with that email does not exist. Please signup'
       });
     }
     // create authenticate method in user model
     if (!user.authenticate(password)) {
       return res.status(400).json({
-        err: 'Email and password do not match'
+        error: 'Email and password do not match'
       });
     }
     // generated a signin token with user id and secret
@@ -38,8 +38,8 @@ exports.signin = (req, res) => {
     // persist the token as 't' in cookie with expiry date
     res.cookie('t', token, { expire: new Date() + 9999 });
     // return response with user and token to frontend client
-    const { _id, baseModelName, email, role } = user;
-    return res.json({ token, user: { _id, baseModelName, email, role } });
+    const { _id, name, email, role } = user;
+    return res.json({ token, user: { _id, name, email, role } });
   });
 };
 
